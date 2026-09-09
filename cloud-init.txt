@@ -1,0 +1,22 @@
+#!/bin/bash
+apt-get update
+apt-get install -y openjdk-17-jdk maven git
+git clone https://github.com/kpraj358/retailorderhub.git /opt/retailorderhub
+cd /opt/retailorderhub
+mvn clean package -DskipTests
+cat <<EOF > /etc/systemd/system/retailorderhub.service
+[Unit]
+Description=RetailOrderHub
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/java -jar /opt/retailorderhub/target/retailorderhub.jar
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl daemon-reload
+systemctl enable retailorderhub
+systemctl start retailorderhub
