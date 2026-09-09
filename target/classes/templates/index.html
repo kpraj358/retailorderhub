@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>RetailOrderHub</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+</head>
+<body>
+    <div class="page">
+        <h1>RetailOrderHub</h1>
+        <p class="subtitle">Training case study &mdash; System Design Training Program</p>
+        <nav>
+            <a th:href="@{/}">Catalog</a> | <a th:href="@{/orders}">Orders</a>
+        </nav>
+
+        <div th:if="${success != null}">
+            <p th:if="${success}" class="banner success">Order placed successfully.</p>
+            <p th:unless="${success}" class="banner error">Order failed. Check inventory, payment method, or required fields.</p>
+        </div>
+
+        <h2 class="section-title">Product Catalog</h2>
+        <table class="catalog">
+            <thead>
+            <tr><th>Name</th><th>Price</th><th>In Stock</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.name}">name</td>
+                <td th:text="${'$' + #numbers.formatDecimal(product.price, 1, 2)}">price</td>
+                <td th:text="${product.quantity}">qty</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h2 class="section-title">Place an Order</h2>
+        <form action="/order" method="post" class="card">
+            <div class="field">
+                <label for="customerId">Customer ID</label>
+                <input type="text" id="customerId" name="customerId" placeholder="CUST-001" required>
+            </div>
+            <div class="field">
+                <label for="items">Items (comma-separated, must match catalog names exactly)</label>
+                <input type="text" id="items" name="items" placeholder="widget, gadget" required>
+            </div>
+            <div class="field">
+                <label for="paymentMethod">Payment Method</label>
+                <select id="paymentMethod" name="paymentMethod">
+                    <option value="CREDIT_CARD">Credit Card</option>
+                    <option value="PAYPAL">PayPal</option>
+                    <option value="GIFT_CARD">Gift Card</option>
+                    <option value="APPLE_PAY">Apple Pay</option>
+                    <!-- Lab 3 (Day 2): add <option value="DEBIT_CARD">Debit Card</option> here
+                         when you build DebitCardStrategy via your own branch/PR. -->
+                </select>
+            </div>
+            <div class="field">
+                <label for="amount">Amount</label>
+                <input type="number" id="amount" step="0.01" name="amount" placeholder="9.99" required>
+            </div>
+            <button type="submit">Place Order</button>
+        </form>
+    </div>
+</body>
+</html>

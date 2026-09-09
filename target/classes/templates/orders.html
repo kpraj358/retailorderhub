@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders &mdash; RetailOrderHub</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" href="/css/style.css">
+</head>
+<body>
+    <div class="page">
+        <h1>RetailOrderHub</h1>
+        <p class="subtitle">Training case study &mdash; System Design Training Program</p>
+        <nav>
+            <a th:href="@{/}">Catalog</a> | <a th:href="@{/orders}">Orders</a>
+        </nav>
+
+        <h2 class="section-title">All Orders</h2>
+        <table class="catalog">
+            <thead>
+            <tr>
+                <th>ID</th><th>Customer</th><th>Items</th><th>Payment</th>
+                <th>Amount</th><th>Status</th><th>Created</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}">
+                <td th:text="${order.id}">1</td>
+                <td th:text="${order.customerId}">CUST-001</td>
+                <td th:text="${order.itemNames}">widget, gadget</td>
+                <td th:text="${order.paymentMethod}">CREDIT_CARD</td>
+                <td th:text="${'$' + #numbers.formatDecimal(order.amount, 1, 2)}">0.00</td>
+                <td th:text="${order.status}">PENDING</td>
+                <td th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd HH:mm:ss')}">timestamp</td>
+            </tr>
+            <tr th:if="${orders.isEmpty()}">
+                <td colspan="7" class="empty">No orders placed yet.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
